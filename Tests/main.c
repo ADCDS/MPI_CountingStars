@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "../matrix.h"
-#include "../image_processing.h"
+#include "../src/matrix.h"
+#include "../src/image_processing.h"
 
 int main() {
     int a[10][10] = {

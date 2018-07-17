@@ -13,7 +13,7 @@
 
 
 #define PNG_DEBUG 3
-#include <png.h>
+#include <libpng12/png.h>
 
 
 
@@ -166,10 +166,8 @@ void process_file(void)
 
 int main(int argc, char **argv)
 {
-    if (argc != 3)
-        printf("Usage: program_name <file_in> <file_out>");
 
-    read_png_file(argv[1]);
+    read_png_file("../images/6_objects.png");
     process_file();
     write_png_file(argv[2]);
 

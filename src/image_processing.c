@@ -19,8 +19,8 @@ int count_objects(int *img, int row, int col) {
     };
     int E = 0, I = 0;
     int i, j;
-    for (i = 0; i < row; ++i) {
-        for (j = 0; j < col; ++j) {
+    for (i = 0; i < row - 1; ++i) {
+        for (j = 0; j < col - 1; ++j) {
             int k = 0;
             //Match an external corner
             while (k < 4) {
