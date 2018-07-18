@@ -9,7 +9,7 @@
 int main(){
     printf("PNG Manager test:\n\n");
     printf("Reading image... ");
-    struct png_file file = read_png("../images/1057x575_6_objects.png");
+    struct png_file file = read_png("../images/1gb.png");
     printf("Done\nBinarizing image... ");
     binarize(file.data, file.height, file.width, 128);
     printf("Done\nCounting objects... ");

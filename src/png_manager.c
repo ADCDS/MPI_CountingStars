@@ -91,6 +91,10 @@ struct png_file read_png(char *file_name) {
         }
     }
 
+    for (y = 0; y < height; y++)
+        free(row_pointers[y]);
+    free(row_pointers);
+
     struct png_file res = { .width = width, .height = height, .data = data};
     return res;
 }

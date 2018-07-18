@@ -1,47 +1,56 @@
+//
+// Created by Turox on 7/17/2018.
+//
+
+#include <mpi.h>
 #include <stdio.h>
-
+#include <stdlib.h>
+#include "../src/png_manager.h"
 #include "../src/matrix.h"
-#include "../src/image_processing.h"
 
-int main() {
-    int a[10][10] = {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
-            {0, 0, 1, 1, 1, 1, 0, 0, 0, 0},
-            {0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
-            {0, 0, 0, 0, 0, 0, 1, 1, 1, 0},
-            {0, 0, 0, 0, 0, 0, 0, 1, 1, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-    };
-    /**
-    int i, j;
+int main(int argc, char** argv) {
+    if(argc != 2) {
+        printf("Please provide an block size");
+        exit(1);
+    }
 
-    for (i = 0; i < 10; i++)
-        for (j = 0; j < 10; j++)
-            a[i][j] = i * 10 + j;
-            **/
+    int block_size = atoi(argv[1]);
+    // Initialize the MPI environment
+    MPI_Init(NULL, NULL);
 
-    print((&a[0][0]), 10, 10, 10);
+    // Get the number of processes
+    int world_size;
+    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
-    printf("\n\n");
+    // Get the rank of the process
+    int world_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
-    /*
-    print((&a[4][3]), 10, 5, 4);
+    // Get the name of the processor
+    char processor_name[MPI_MAX_PROCESSOR_NAME];
+    int name_len;
+    MPI_Get_processor_name(processor_name, &name_len);
+    MPI_RECV
+    // Print off a hello world message
+    printf("Hello world from processor %s, rank %d out of %d processors\n",
+           processor_name, world_rank, world_size);
 
+    if(world_rank == 0){//Main process
+        printf("RANK 0: Reading PNG\n");
+        struct png_file file = read_png("../images/1055x575_6_objects.png");
+        if(file.width % block_size != 0 || file.height % block_size != 0) {
+            printf("Invalid block size");
+            exit(255);
+        }
 
-    printf("\n\n Printing extracted matrix\n");
-    int *b = extract((&a[4][3]), 10, 5, 4);
-    print(b, 4, 5, 4);
+        for (int i = 1; i < world_size; ++i) {
+            int * new_matrix = extract((&file.data[]), file.width, block_size, block_size);
+            MPI_Isend(&number, 1, MPI_INT, 1-world_rank, 0, MPI_COMM_WORLD);
+        }
+    }else{
 
-    printf("\n\n Printing binarized matrix\n");
-    binarize(b, 5, 4, 1);
-    print(b, 4, 5, 4);
-     */
+    }
 
-    printf("\n\n How many 1's in matrix %d\n", count_objects(&a[0][0], 10, 10));
-
-    return 0;
+    // Finalize the MPI environment.
+    MPI_Finalize();
 }
