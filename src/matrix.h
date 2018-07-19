@@ -14,7 +14,19 @@
  * @param col
  * @return
  */
-int *extract(const int * a, int col_size, int row, int col);
+int *extract(const int *a, int col_size, int row, int col);
+
+
+/**
+ * Creates a copy matrix a, determined by row and col
+ * Returns an pointer to a new matrix, zerofills if exceeds original matrix's capacity
+ * @param a
+ * @param col_size
+ * @param row
+ * @param col
+ * @return
+ */
+int *extract_zf(const int *a, int offset, int row_size, int col_size, int row, int col);
 
 /**
  * Prints an matrix
