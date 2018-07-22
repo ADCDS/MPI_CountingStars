@@ -6,9 +6,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "../src/png_manager.h"
-#include "../src/matrix.h"
-#include "../src/image_processing.h"
+#include "src/png_manager.h"
+#include "src/matrix.h"
+#include "src/image_processing.h"
 
 int main(int argc, char **argv) {
     if (argc != 2) {

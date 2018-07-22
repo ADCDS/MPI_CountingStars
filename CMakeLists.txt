@@ -16,7 +16,7 @@ add_executable(PP_Final_TestImageProcessing Tests/image_processing_test.c src/ma
 add_executable(PP_Final_TestReadPNG Tests/read_png.c src/matrix.h src/matrix.c src/image_processing.c src/image_processing.h)
 add_executable(PP_Final_TestPNGManager Tests/png_manager_test.c src/matrix.h src/matrix.c src/image_processing.c src/image_processing.h src/png_manager.c src/png_manager.h)
 add_executable(PP_Final_TestReadPNGAndCountObjects Tests/read_png_count_objects_test.c src/matrix.h src/matrix.c src/image_processing.c src/image_processing.h src/png_manager.c src/png_manager.h)
-add_executable(PP_Final_TestMain Tests/main.c src/matrix.h src/matrix.c src/image_processing.c src/image_processing.h src/png_manager.c src/png_manager.h)
+add_executable(PP_Final_Main main.c src/matrix.h src/matrix.c src/image_processing.c src/image_processing.h src/png_manager.c src/png_manager.h)
 add_executable(PP_Final_TestMPI Tests/mpi_test.c)
 add_executable(PP_Final_TestExtractZF Tests/extract_zf_test.c src/matrix.h src/matrix.c src/image_processing.c src/image_processing.h src/png_manager.c src/png_manager.h)
 
@@ -24,7 +24,7 @@ target_link_libraries(PP_Final_TestImageProcessing ${PNG_LIBRARIES})
 target_link_libraries(PP_Final_TestReadPNG ${PNG_LIBRARIES})
 target_link_libraries(PP_Final_TestPNGManager ${PNG_LIBRARIES})
 target_link_libraries(PP_Final_TestReadPNGAndCountObjects ${PNG_LIBRARIES})
-target_link_libraries(PP_Final_TestMain ${PNG_LIBRARIES} ${MPI_C_LIBRARIES})
+target_link_libraries(PP_Final_Main ${PNG_LIBRARIES} ${MPI_C_LIBRARIES})
 target_link_libraries(PP_Final_TestMPI ${MPI_C_LIBRARIES})
 target_link_libraries(PP_Final_TestExtractZF ${PNG_LIBRARIES})
 

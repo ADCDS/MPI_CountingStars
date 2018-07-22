@@ -1,3 +1,5 @@
 cmake-build-debug-wsl/
+cmake-build-debug/
 .idea/
 images/1gb.png
+out/
