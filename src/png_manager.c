@@ -2,7 +2,7 @@
 // Created by Turox on 7/17/2018.
 //
 
-#include <libpng12/png.h>
+#include <libpng/png.h>
 #include <stdlib.h>
 
 #include "png_manager.h"

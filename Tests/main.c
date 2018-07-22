@@ -59,16 +59,18 @@ int main(int argc, char **argv) {
         int i;
         int iter_num = 0;
         int current_I = 0, current_J = 0;
-        while( current_I < file.width){
-            while(current_J < file.height){
-                printf("RANK 0: Sending %d bytes POS{X: %d,Y: %d} to RANK %d\n", block_size * block_size, current_I, current_J, iter_num + 1);
-                int *extracted = extract_zf((&file.data[current_J * file.width + current_I]), current_J * file.width + current_I, file.height, file.width, block_size,
-                                         block_size);
+        while (current_I < file.width) {
+            while (current_J < file.height) {
+                printf("RANK 0: Sending %d bytes POS{X: %d,Y: %d} to RANK %d\n", block_size * block_size, current_I,
+                       current_J, iter_num + 1);
+                int *extracted = extract_zf((&file.data[current_J * file.width + current_I]),
+                                            current_J * file.width + current_I, file.height, file.width, block_size,
+                                            block_size);
                 MPI_Send(extracted, block_size * block_size, MPI_INT, iter_num + 1, 0, MPI_COMM_WORLD);
                 free(extracted);
                 current_J += block_size;
 
-                if(++iter_num >= world_size - 1)
+                if (++iter_num >= world_size - 1)
                     goto leave1;
             }
             current_J = 0;
@@ -103,20 +105,23 @@ int main(int argc, char **argv) {
                 total += received_subtotals[indices[j]];
             }
 
-            while( current_I < file.width) {
+            while (current_I < file.width) {
                 while (current_J < file.height) {
                     printf("RANK 0: Received result from RANK %d\n", indices[iter_num] + 1);
 
-                    printf("RANK 0: Sending %d bytes POS{X: %d,Y: %d} to RANK %d\n", block_size * block_size, current_I, current_J, indices[iter_num] + 1);
-                    int *extracted = extract_zf((&file.data[current_J * file.width + current_I]), current_J * file.width + current_I, file.height, file.width, block_size,
-                                             block_size);
+                    printf("RANK 0: Sending %d bytes POS{X: %d,Y: %d} to RANK %d\n", block_size * block_size, current_I,
+                           current_J, indices[iter_num] + 1);
+                    int *extracted = extract_zf((&file.data[current_J * file.width + current_I]),
+                                                current_J * file.width + current_I, file.height, file.width, block_size,
+                                                block_size);
                     MPI_Send(extracted, block_size * block_size, MPI_INT, indices[iter_num] + 1, 0, MPI_COMM_WORLD);
                     free(extracted);
-                    MPI_Irecv(&received_subtotals[indices[iter_num]], 1, MPI_INT, indices[iter_num] + 1, 0, MPI_COMM_WORLD,
+                    MPI_Irecv(&received_subtotals[indices[iter_num]], 1, MPI_INT, indices[iter_num] + 1, 0,
+                              MPI_COMM_WORLD,
                               &receive_requests[indices[iter_num]]);
                     current_J += block_size;
 
-                    if(++iter_num >= world_size - 1)
+                    if (++iter_num > num_done - 1)
                         goto leave2;
                 }
                 current_J = 0;
@@ -127,18 +132,20 @@ int main(int argc, char **argv) {
                    (file.width * file.height));
         }
         printf("RANK 0: Finished\n");
+        MPI_Abort(MPI_COMM_WORLD, 0);
         MPI_Finalize();
         exit(0);
 
     } else {
         //Slave
-        int sub_image[block_size*block_size];
+        //int sub_image[block_size*block_size];
+        int *sub_image = (int *) malloc(sizeof(int) * block_size * block_size);
         MPI_Status status;
 
         while (1) {
             printf("RANK %d: Waiting block from RANK 0\n", world_rank);
             fflush(stdout);
-            MPI_Recv(&sub_image, block_size * block_size, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+            MPI_Recv(sub_image, block_size * block_size, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
             printf("RANK %d: Received block from RANK 0\n", world_rank);
             fflush(stdout);
             binarize(sub_image, block_size, block_size, 128);
