@@ -24,25 +24,13 @@ struct png_file read_png(char *file_name) {
 
     /* open file and test for it being a png */
     FILE *fp = fopen(file_name, "rb");
-    if (!fp)
-        printf("[read_png_file] File %s could not be opened for reading", file_name);
+
     fread(header, 1, 8, fp);
-    if (png_sig_cmp(header, 0, 8))
-        printf("[read_png_file] File %s is not recognized as a PNG file", file_name);
-
-
     /* initialize stuff */
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 
-    if (!png_ptr)
-        printf("[read_png_file] png_create_read_struct failed");
 
     info_ptr = png_create_info_struct(png_ptr);
-    if (!info_ptr)
-        printf("[read_png_file] png_create_info_struct failed");
-
-    if (setjmp(png_jmpbuf(png_ptr)))
-        printf("[read_png_file] Error during init_io");
 
     png_init_io(png_ptr, fp);
     png_set_sig_bytes(png_ptr, 8);
@@ -59,8 +47,6 @@ struct png_file read_png(char *file_name) {
 
 
     /* read file */
-    if (setjmp(png_jmpbuf(png_ptr)))
-        printf("[read_png_file] Error during read_image");
 
     row_pointers = (png_bytep *) malloc(sizeof(png_bytep) * height);
     for (y = 0; y < height; y++)
@@ -70,22 +56,11 @@ struct png_file read_png(char *file_name) {
 
     fclose(fp);
 
-    if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB)
-        printf("[process_file] input file is PNG_COLOR_TYPE_RGB but must be PNG_COLOR_TYPE_RGBA "
-               "(lacks the alpha channel)");
-
-    if (png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_RGBA)
-        printf("[process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA (%d) (is %d)",
-               PNG_COLOR_TYPE_RGBA, png_get_color_type(png_ptr, info_ptr));
-
     int *data = malloc(sizeof(int) * width * height);
     for (y = 0; y < height; y++) {
         png_byte *row = row_pointers[y];
         for (x = 0; x < width; x++) {
             png_byte *ptr = &(row[x * 4]);
-            /* printf("Pixel at position [ %d - %d ] has RGBA values: %d - %d - %d - %d\n", x, y, ptr[0], ptr[1], ptr[2],
-                   ptr[3]);
-                   */
 
             data[y * width + x] =  ptr[0];
         }

@@ -4,7 +4,7 @@ from tabulate import tabulate
 import re
 
 block_sizes = [10, 100, 1000, 2000, 4000, 8000]
-processors_num = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+processors_num = [2, 3, 4, 5, 6, 7, 8, 9]
 
 results = DataFrame(columns=["processor_num", "block_size", "microseconds"])
 
