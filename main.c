@@ -157,6 +157,12 @@ int main(int argc, char **argv) {
 
 
         printf("%lu\n", total_time);
+        FILE *fp = fopen("results.txt", "ab");
+        if (fp != NULL)
+        {
+            fprintf(fp, "%d,%d,%lu\n", world_size, block_size * block_size, total_time);
+            fclose(fp);
+        }
         sleep(3);
         // printf("RANK 0: %li stars counted \n", total_starts_count);
         MPI_Abort(MPI_COMM_WORLD, 0);
