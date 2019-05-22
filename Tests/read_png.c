@@ -13,8 +13,8 @@
 
 
 #define PNG_DEBUG 3
-#include <libpng12/png.h>
-
+/* #include <libpng12/png.h> */
+#include <png.h>
 
 
 int x, y;
