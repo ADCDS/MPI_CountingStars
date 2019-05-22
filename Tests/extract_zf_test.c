@@ -1,25 +1,35 @@
 //
 // Created by Turox on 7/18/2018.
 //
-#include <mpi.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "../src/png_manager.h"
 #include "../src/matrix.h"
-#include "../src/image_processing.h"
 
 int main(){
-    struct png_file file = read_png("../images/100x100.png");
+    int mat[4][4] = {
+            {1,2,3,4},
+            {5,6,7,8},
+            {9,10,11,12},
+            {13,14,15,16},
+    };
+    int width = 4;
+    int height = 4;
+
+    print(&mat, width, 4, 4);
+
     int current_I = 0, current_J = 0;
-    int block_size = 15;
+    int block_size = 2;
 
-    while( current_I < file.width){
-        while(current_J < file.height){
+    while( current_I < width){
+        while(current_J < height){
             printf("RANK 0: Sending %d bytes POS{X: %d,Y: %d}\n", block_size * block_size, current_I, current_J);
-            int *extracted = extract_zf((&file.data[current_J * file.width + current_I]), current_J * file.width + current_I, file.height, file.width, block_size,
+            fflush(stdout);
+            int *extracted = extract_zf(&mat, current_I, current_J, height, width, block_size,
                                         block_size);
-
+            print(extracted, block_size, block_size, block_size);
+            fflush(stdout);
             free(extracted);
             current_J += block_size;
 

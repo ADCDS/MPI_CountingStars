@@ -26,7 +26,7 @@ int *extract(const int *a, int col_size, int row, int col);
  * @param col
  * @return
  */
-int *extract_zf(const int *a, int offset, int row_size, int col_size, int row, int col);
+int *extract_zf(const int *a, int offset_i, int offset_j, int row_size, int col_size, int row, int col);
 
 /**
  * Prints an matrix
