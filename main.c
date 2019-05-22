@@ -74,8 +74,8 @@ int main(int argc, char **argv) {
                     printf("RANK 0: Sending %d bytes POS{X: %d,Y: %d} to RANK %d\n", block_size * block_size, current_I,
                            current_J, iter_num + 1);
                     max_working_slaves++;
-                    int *extracted = extract_zf((&file.data[current_J * file.width + current_I]),
-                                                current_J * file.width + current_I, file.height, file.width, block_size,
+                    int *extracted = extract_zf(file.data,
+                                                current_I, current_J, file.height, file.width, block_size,
                                                 block_size);
                     MPI_Send(extracted, block_size * block_size, MPI_INT, iter_num + 1, 0, MPI_COMM_WORLD);
                     free(extracted);
@@ -123,8 +123,8 @@ int main(int argc, char **argv) {
 
                         printf("RANK 0: Sending %d bytes POS{X: %d,Y: %d} to RANK %d\n", block_size * block_size, current_I,
                                current_J, indices[iter_num] + 1);
-                        int *extracted = extract_zf((&file.data[current_J * file.width + current_I]),
-                                                    current_J * file.width + current_I, file.height, file.width, block_size,
+                        int *extracted = extract_zf(file.data,
+                                                    current_I, current_J, file.height, file.width, block_size,
                                                     block_size);
                         MPI_Send(extracted, block_size * block_size, MPI_INT, indices[iter_num] + 1, 0, MPI_COMM_WORLD);
                         free(extracted);
